@@ -81,6 +81,7 @@ void projectMembers()
 		switch (command) {
 		case '1':
         //player vs player
+        
 			break;
 		case '2':
 		//player vs AI
@@ -97,7 +98,7 @@ void command() {
 int main()
 {
     projectMembers();//shows intro informations
-    char tbl[3][3]{
+    char board[3][3]{
        {'-', '-', '-'},
        {'-', '-', '-'},
        {'-', '-', '-'}

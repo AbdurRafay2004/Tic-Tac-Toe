@@ -3,6 +3,7 @@
 
 useless/**
 *.exe
+*.o
 *.zip
 *.rar
 *.vscode
