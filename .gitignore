@@ -1,0 +1,9 @@
+//this is .gitignore file
+//ignore folder named 'useless' and its sub folder including all files
+
+useless/**
+*.exe
+*.zip
+*.rar
+*.vscode
+# *.gitignore
