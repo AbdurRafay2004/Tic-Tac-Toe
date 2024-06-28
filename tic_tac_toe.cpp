@@ -26,29 +26,6 @@ player::player()
     totalmoves = 0;
 }
 
-class handlePlayerMove : public player
-{
-private:
-public:
-};
-
-class handleAiMove : public player
-{
-};
-
-void drawBoard()
-{
-    
-}
-void checkWin()
-{
-}
-void checkTie()
-{
-}
-void playGame()
-{
-}
 char menu(){
     char choice;
     
