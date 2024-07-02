@@ -150,8 +150,28 @@ void TicTacToe::displayBoard() const
 string TicTacToe::getUserName(string name, char mark)
 {
 
-    cout << "Who will play " << mark << "(Enter name): ";
+    cout << "Who will play ";
+    if (mark == 'X')
+    {
+        textcolor(4);
+    }
+    else
+    {
+        textcolor(2);
+    }
+    cout << mark;
+    textcolor(15); // white
+    cout << " (Enter name): ";
+    if (mark == 'X')
+    {
+        textcolor(4);
+    }
+    else
+    {
+        textcolor(2);
+    }
     getline(cin, name);
+    textcolor(15); // white
 
     return name;
 }
@@ -168,16 +188,16 @@ void TicTacToe::getUserMove(char players_O_X)
     while (true)
     {
         if (players_O_X == 'X')
-            {
-                textcolor(4);
-                cout << playerName_X;
-            }
-            else
-            {
-                textcolor(6);
-                cout << playerName_O;
-            }
-        textcolor(15);//white
+        {
+            textcolor(4);
+            cout << playerName_X;
+        }
+        else
+        {
+            textcolor(2);
+            cout << playerName_O;
+        }
+        textcolor(15); // white
         cout << " Where do you want to play? Select a number from 1-9: ";
         textcolor(4); // red
 
@@ -280,10 +300,10 @@ void TicTacToe::playGame()
             }
             else
             {
-                textcolor(6);
+                textcolor(2);
                 cout << playerName_O;
             }
-            textcolor(2);//green
+            textcolor(2); // green
             cout << " WINS!!\n";
             textcolor(15); // white
             gameOver = true;
@@ -421,10 +441,8 @@ std::map<string, string> users = {
     {"younus", "younus"},
     {"p", "p"}};
 
-// Function to display the menu and get user choice
-char menu()
+string contributions()
 {
-    char choice;
     textcolor(4);
     cout << "\t\t\t\t      ***  TIC - TAC - TOE  ***\n\n";
     cout << "\t\t\t\tWELCOME TO TIC-TAC-TOE BY TEAM ROCKET\n"
@@ -437,6 +455,14 @@ char menu()
         << "\t\t\t                     \n";
 
     textcolor(15); // reset color
+}
+// Function to display the menu and get user choice
+char menu()
+{
+    char choice;
+
+    textcolor(1);
+    cout << "\t\t\tPick your choice" << endl;
 
     textcolor(1);
     cout << "\t\t\t[1] ";
@@ -461,13 +487,14 @@ bool Password()
 {
     string username, password;
     textcolor(3);
-    cout << "Enter username: ";
+    cout << "\t\t\tEnter username: ";
     textcolor(4);
     cin >> username;
     textcolor(3);
-    cout << "Enter password: ";
+    cout << "\t\t\tEnter password: ";
     textcolor(4);
     cin >> password;
+    cout << endl;
     textcolor(7);
     if (users.find(username) != users.end() && users[username] == password)
     {
@@ -519,6 +546,7 @@ void command()
 // Main function to start the game
 int main()
 {
+    contributions();
     command();
     cin.get();
     return 0;
