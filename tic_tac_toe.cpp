@@ -29,12 +29,12 @@ public:
     virtual bool checkForWins(char player) const = 0; 
     virtual bool checkForDraw() const = 0;         
     
-    // Function to switch players
-    char togglePlayer(char player);
-
     // Functions to play the game
     virtual void playGame();    
     virtual void playVsAI(); 
+
+    // Function to switch players
+    char togglePlayer(char player);
 
     // Function to initialize the board
     void fill_board();  
