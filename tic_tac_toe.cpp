@@ -432,8 +432,8 @@ char menu()
     textcolor(3); // change color to green
     std::cout
         << "\t\t\t                     :: Abdur Rafay      (1013)\n"
-        << "\t\t\tContributions        :: Al Abedin Wasee  (1013)\n"
-        << "\t\t\t                     :: Younus Ali Molla (1013)\n"
+        << "\t\t\tContributions        :: Al Abedin Wasee  (1042)\n"
+        << "\t\t\t                     :: Younus Ali Molla (1047)\n"
         << "\t\t\t                     \n";
 
     textcolor(15); // reset color
