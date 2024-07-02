@@ -21,19 +21,29 @@ void textcolor(int color)
 class Game
 {
 public:
-    Game() : totalMoves(0) { fill_board(); }          // Constructor to initialize the board
-    virtual void displayBoard() const = 0;            // Pure virtual function for displaying the board
-    virtual void getUserMove(char player) = 0;        // Pure virtual function for user input
-    virtual bool checkForWins(char player) const = 0; // Pure virtual function for checking wins
-    virtual bool checkForDraw() const = 0;            // Pure virtual function for checking draw
-    char togglePlayer(char player);                   // Function to switch players
-    virtual void playGame();                          // Function to play the game
-    virtual void playVsAI();                          // Function to play against AI
-    void fill_board();                                // Function to initialize the board
+    Game() : totalMoves(0) { fill_board(); } // Constructor to initialize the board
+
+    // Pure virtual functions for game operations
+    virtual void displayBoard() const = 0;            
+    virtual void getUserMove(char player) = 0;       
+    virtual bool checkForWins(char player) const = 0; 
+    virtual bool checkForDraw() const = 0;         
+    
+    // Function to switch players
+    char togglePlayer(char player);
+
+    // Functions to play the game
+    virtual void playGame();    
+    virtual void playVsAI(); 
+
+    // Function to initialize the board
+    void fill_board();  
+
 protected:
     static const int BSIZE = 3;         // Board size
     static const int maxMoves = 9;      // Maximum number of moves
     static const int minMovesToWin = 5; // Minimum number of moves to win
+
     char board[BSIZE][BSIZE];           // Game board
     int totalMoves;                     // Counter for total moves
 };
@@ -72,36 +82,58 @@ void Game::playVsAI()
 class TicTacToe : public Game
 {
 public:
+    // Constructor to initialize the board
     TicTacToe()
     {
         totalMoves = 0;
         fill_board();
-    } // Constructor to initialize the board
+    } 
 
-    void displayBoard() const override;            // Override function to display the board
-    void getUserMove(char player) override;        // Override function for user input
-    bool checkForWins(char player) const override; // Override function to check for wins
-    bool checkForDraw() const override;            // Override function to check for draw
+    // Override functions for game operations
+    void displayBoard() const override;            
+    void getUserMove(char player) override;      
+    bool checkForWins(char player) const override; 
+    bool checkForDraw() const override;
 
-    void playGame() override; // Override function to play the game
+    // Override function to play the game
+    void playGame() override; 
 };
 
 // Function to display the game board
 void TicTacToe::displayBoard() const
 {
     // Loop through the board and display its contents
+    char x = 'X';
+    char o = 'O';
+    
     for (int row = 0; row < 3; row++)
     {
+        cout << "\t\t"; // Adds tab spacing for each row
         for (int col = 0; col < 3; col++)
         {
-            cout << " " << board[row][col];
-            if (col < 2)
-                cout << " |";
+            cout << " ";
+            // << board[row][col];
+            if (board[row][col] == x)
+            {
+                textcolor(4);
+            }
+            else if (board[row][col] == o)
+            {
+                textcolor(2);
+            }
+            cout << board[row][col];
+
+            textcolor(15);
+            if (col < 2) cout << " |";
         }
+    
+        //guide board (will iterate 3 times)
         cout << "\t\t " << (row * 3) + 1 << " | " << (row * 3) + 2 << " | " << (row * 3) + 3;
+
+        //guide board lines
         if (row < 2)
             cout << endl
-                 << "-----------\t\t-----------";
+                 << "\t\t-----------\t\t-----------";
         cout << endl;
     }
     cout << endl;
@@ -120,7 +152,7 @@ void TicTacToe::getUserMove(char player)
         cout << "Player " << player_turn << " Where do you want to play? Select a number from 1-9: " << endl;
         getline(cin, input);
 
-        if (input != "")
+        if (/*input != ""*/ !input.empty())
         {
             char_entered = input.c_str()[0];
             if (char_entered >= '1' && char_entered <= '9')
@@ -215,9 +247,10 @@ void TicTacToe::playGame()
 class TicTacToeVsAI : public TicTacToe
 {
 public:
-    using TicTacToe::TicTacToe;                                  // Inherit constructors
-    void compMove(char player);                                  // Function for AI move
-    void playVsAI() override;                                    // Override function to play against AI
+    using TicTacToe::TicTacToe;   // Inherit constructors
+    void compMove(char player);   // Function for AI move
+    void playVsAI() override;     // Override function to play against AI
+
     friend void displayWinner(TicTacToeVsAI &game, char player); // Friend function declaration
 };
 
@@ -275,7 +308,9 @@ void TicTacToeVsAI::playVsAI()
             cout << "IT'S A DRAW! Play again!\n";
             gameOver = true;
         }
+
         player = togglePlayer(player);
+
         compMove(player);
         if (checkForWins(player))
         {
