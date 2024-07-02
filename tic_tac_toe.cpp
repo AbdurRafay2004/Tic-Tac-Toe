@@ -97,7 +97,12 @@ public:
     bool checkForDraw() const override;
 
     // Override function to play the game
-    void playGame() override; 
+    void playGame() override;
+
+    string playerName_X;
+    string playerName_O;
+
+    string getUserName(string name); 
 };
 
 // Function to display the game board
@@ -140,14 +145,20 @@ void TicTacToe::displayBoard() const
     cout << endl;
 }
 
+string TicTacToe::getUserName(string name){
+    cout << "Who will play X(Enter name): ";
+    getline(cin, name);
+
+    return name;
+}
 // Function to get user move and place it on the board
 void TicTacToe::getUserMove(char players_O_X)
 {
     string input;
     char char_entered;
     int num_entered, row, col, index;
-    string player_x = "Unknown";
-    string player_o = "AI";
+    string player_x = playerName_X;
+    string player_o = playerName_O;
     string player_turn = (players_O_X == 'X') ? player_x : player_o;
 
     while (true)
@@ -239,6 +250,8 @@ void TicTacToe::playGame()
 {
     char players_O_X = 'X';
     bool gameOver = false;
+    playerName_X = getUserName(playerName_X);
+    playerName_O = getUserName(playerName_O);
     do
     {
         displayBoard();
@@ -247,7 +260,7 @@ void TicTacToe::playGame()
         {
             textcolor(2);//green
             cout << "\n *********** WE HAVE A WINNER!! ***********\n"
-                 << players_O_X << " WINS!!\n";
+                 << ((players_O_X == 'X') ? playerName_X : playerName_O) << " WINS!!\n";
             textcolor(15);//white
             gameOver = true;
             break;
@@ -272,18 +285,18 @@ public:
     using TicTacToe::TicTacToe;   // Inherit constructors
     void compMove(char players_O_X);   // Function for AI move
     void playVsAI() override;     // Override function to play against AI
-
-    friend void displayWinner(TicTacToeVsAI &game, char players_O_X); // Friend function declaration
+    
+    friend void displayWinner(TicTacToeVsAI &game, char players_O_X, string playerName_X); // Friend function declaration
 };
 
 // Friend function definition(used this to showcase the implementation of friend functions)
-void displayWinner(TicTacToeVsAI &game, char players_O_X)
+void displayWinner(TicTacToeVsAI &game, char players_O_X, string playerName_X)
 {
     if (game.checkForWins(players_O_X))
     {
         textcolor(2);//green
         cout << "\n *********** WE HAVE A WINNER!! ***********\n"
-             << players_O_X << " WINS!!\n";
+             << ((players_O_X == 'X') ? playerName_X : "Computer") << " WINS!!\n";
         textcolor(15);//white
     }
 }
@@ -320,6 +333,7 @@ void TicTacToeVsAI::compMove(char players_O_X)
 // Function to play against AI
 void TicTacToeVsAI::playVsAI()
 {
+    playerName_X = getUserName(playerName_X);
     char players_O_X = 'X';
     bool gameOver = false;
     do
@@ -328,7 +342,7 @@ void TicTacToeVsAI::playVsAI()
         getUserMove(players_O_X);
         if (checkForWins(players_O_X))
         {
-            displayWinner(*this, players_O_X); // Using the friend function
+            displayWinner(*this, players_O_X, playerName_X); // Using the friend function
             gameOver = true;
             break;
         }
@@ -344,7 +358,7 @@ void TicTacToeVsAI::playVsAI()
         compMove(players_O_X);
         if (checkForWins(players_O_X))
         {
-            displayWinner(*this, players_O_X); // Using the friend function
+            displayWinner(*this, players_O_X, playerName_X); // Using the friend function
             gameOver = true;
             break;
         }
@@ -363,7 +377,8 @@ void TicTacToeVsAI::playVsAI()
 std::map<string, string> users = {
     {"Wasee", "wasee"},
     {"Rafay", "rafay"},
-    {"Younus", "younus"}};
+    {"Younus", "younus"},
+    {"gg", "gg"}};
 
 // Function to display the menu and get user choice
 char menu()
