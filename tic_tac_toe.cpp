@@ -145,6 +145,7 @@ void TicTacToe::displayBoard() const
     cout << endl;
 }
 
+//Function to get names of the players
 string TicTacToe::getUserName(string name){
     cout << "Who will play X(Enter name): ";
     getline(cin, name);
@@ -157,9 +158,7 @@ void TicTacToe::getUserMove(char players_O_X)
     string input;
     char char_entered;
     int num_entered, row, col, index;
-    string player_x = playerName_X;
-    string player_o = playerName_O;
-    string player_turn = (players_O_X == 'X') ? player_x : player_o;
+    string player_turn = (players_O_X == 'X') ? playerName_X : playerName_O;
 
     while (true)
     {
