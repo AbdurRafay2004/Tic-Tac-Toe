@@ -102,7 +102,7 @@ public:
     string playerName_X;
     string playerName_O;
 
-    string getUserName(string name); 
+    string getUserName(string name, char mark); 
 };
 
 // Function to display the game board
@@ -146,8 +146,9 @@ void TicTacToe::displayBoard() const
 }
 
 //Function to get names of the players
-string TicTacToe::getUserName(string name){
-    cout << "Who will play X(Enter name): ";
+string TicTacToe::getUserName(string name, char mark){
+    
+    cout << "Who will play "<<mark<<"(Enter name): ";
     getline(cin, name);
 
     return name;
@@ -158,6 +159,8 @@ void TicTacToe::getUserMove(char players_O_X)
     string input;
     char char_entered;
     int num_entered, row, col, index;
+    
+    //switch player
     string player_turn = (players_O_X == 'X') ? playerName_X : playerName_O;
 
     while (true)
@@ -249,8 +252,8 @@ void TicTacToe::playGame()
 {
     char players_O_X = 'X';
     bool gameOver = false;
-    playerName_X = getUserName(playerName_X);
-    playerName_O = getUserName(playerName_O);
+    playerName_X = getUserName(playerName_X, 'X');
+    playerName_O = getUserName(playerName_O, 'O');
     do
     {
         displayBoard();
@@ -332,7 +335,7 @@ void TicTacToeVsAI::compMove(char players_O_X)
 // Function to play against AI
 void TicTacToeVsAI::playVsAI()
 {
-    playerName_X = getUserName(playerName_X);
+    playerName_X = getUserName(playerName_X, 'X');
     char players_O_X = 'X';
     bool gameOver = false;
     do
