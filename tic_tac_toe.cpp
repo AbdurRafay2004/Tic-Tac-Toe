@@ -89,27 +89,7 @@ public:
 // Function to display the game board
 void TicTacToe::displayBoard() const
 {
-    /*
-    cout << " --------------\n";
-    for (int row = 0; row < BSIZE; row++)
-    {
-        cout << " | ";
-        for (int col = 0; col < BSIZE; col++)
-        {
-            cout << board[row][col] << "  |";
-        }
-        cout << "\n --------------\n";
-    }
-    */
-    /*
-    cout << " " << board[0][0] << " | " << board[0][1] << " | " << board[0][2];
-        cout << "\t\t 1 | 2 | 3 " << endl;
-        cout << " " << board[1][0] << " | " << board[1][1] << " | " << board[1][2];
-        cout << "\t\t 4 | 5 | 6 " << endl;
-        cout << " " << board[2][0] << " | " << board[2][1] << " | " << board[2][2];
-        cout << "\t\t 7 | 8 | 9 " << endl
-             << endl;
-    */
+    // Loop through the board and display its contents
     for (int row = 0; row < 3; row++)
     {
         for (int col = 0; col < 3; col++)
@@ -178,8 +158,10 @@ void TicTacToe::getUserMove(char player)
 // Function to check if a player has won
 bool TicTacToe::checkForWins(char player) const
 {
+    // Check if there are enough moves to win
     if (totalMoves >= minMovesToWin)
     {
+        // Check rows and columns
         for (int i = 0; i < BSIZE; ++i)
         {
             if ((board[i][0] == player && board[i][1] == player && board[i][2] == player) || // Rows
@@ -188,6 +170,7 @@ bool TicTacToe::checkForWins(char player) const
                 return true;
             }
         }
+        // Check diagonals
         if ((board[0][0] == player && board[1][1] == player && board[2][2] == player) || // Diagonal
             (board[0][2] == player && board[1][1] == player && board[2][0] == player))
         { // Anti-diagonal
@@ -309,10 +292,12 @@ void TicTacToeVsAI::playVsAI()
     displayBoard();
 }
 
+// Map to store users and passwords
 std::map<string, string> users = {
     {"Wasee", "wasee"},
     {"Rafay", "rafay"},
     {"Younus", "younus"}};
+
 // Function to display the menu and get user choice
 char menu()
 {
@@ -346,6 +331,8 @@ char menu()
     cin >> choice;
     return choice;
 }
+
+// Function to check user password
 bool Password()
 {
     string username, password;
@@ -367,6 +354,7 @@ bool Password()
         return false;
     }
 }
+
 // Function to execute commands based on user choice
 void command()
 {
