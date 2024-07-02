@@ -417,7 +417,7 @@ void TicTacToeVsAI::playVsAI()
 // Map to store users and passwords
 std::map<string, string> users = {
     {"wasee", "wasee"},
-    {"wafay", "rafay"},
+    {"rafay", "rafay"},
     {"younus", "younus"},
     {"p", "p"}};
 
