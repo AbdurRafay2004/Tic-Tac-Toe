@@ -1,7 +1,9 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
 #include <ctime>
 #include <windows.h>
+#include <map>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -19,22 +21,29 @@ void textcolor(int color)
 class Game
 {
 public:
-    Game() : totalMoves(0) { fill_board(); }
-    void fill_board();
+    Game() : totalMoves(0) { fill_board(); }          // Constructor to initialize the board
     virtual void displayBoard() const = 0;            // Pure virtual function for displaying the board
-    //need to get user input
-    //checkwin
-    //checkdraw
-    //switch player
-    virtual void playGame() = 0;                      // Function to play the game
-    //ai
+    virtual void getUserMove(char player) = 0;        // Pure virtual function for user input
+    virtual bool checkForWins(char player) const = 0; // Pure virtual function for checking wins
+    virtual bool checkForDraw() const = 0;            // Pure virtual function for checking draw
+    char togglePlayer(char player);                   // Function to switch players
+    virtual void playGame();                          // Function to play the game
+    virtual void playVsAI();                          // Function to play against AI
+    void fill_board();                                // Function to initialize the board
 protected:
-    static const int BSIZE = 3; // Board size
-    int maxMoves = 9;           // Maximum number of moves
-    int minMovesToWin = 5;      // Minimum number of moves to win
-    char board[BSIZE][BSIZE];   // Game board
-    int totalMoves;             // Counter for total moves
+    static const int BSIZE = 3;         // Board size
+    static const int maxMoves = 9;      // Maximum number of moves
+    static const int minMovesToWin = 5; // Minimum number of moves to win
+    char board[BSIZE][BSIZE];           // Game board
+    int totalMoves;                     // Counter for total moves
 };
+
+// Function to switch players
+char Game::togglePlayer(char player)
+{
+    return (player == 'X') ? 'O' : 'X';
+}
+
 // Function to initialize the board
 void Game::fill_board()
 {
@@ -47,19 +56,37 @@ void Game::fill_board()
     }
 }
 
+// Function to play the game (to be overridden in derived class)
+void Game::playGame()
+{
+    // This method will be overridden in the derived class.
+}
+
+// Function to play against AI (to be overridden in derived class)
+void Game::playVsAI()
+{
+    // This method will be overridden in the derived class.
+}
+
+// Derived class for TicTacToe game
 class TicTacToe : public Game
 {
 public:
-    // Constructor to initialize the board
     TicTacToe()
     {
         totalMoves = 0;
         fill_board();
-    }
+    } // Constructor to initialize the board
+
     void displayBoard() const override;            // Override function to display the board
-    void playGame() override;           // Override function to
+    void getUserMove(char player) override;        // Override function for user input
+    bool checkForWins(char player) const override; // Override function to check for wins
+    bool checkForDraw() const override;            // Override function to check for draw
+
+    void playGame() override; // Override function to play the game
 };
 
+// Function to display the game board
 void TicTacToe::displayBoard() const
 {
     /*
@@ -83,25 +110,210 @@ void TicTacToe::displayBoard() const
         cout << "\t\t 7 | 8 | 9 " << endl
              << endl;
     */
-    for (int row = 0; row < 3; row++) {
-        for (int col = 0; col < 3; col++) {
+    for (int row = 0; row < 3; row++)
+    {
+        for (int col = 0; col < 3; col++)
+        {
             cout << " " << board[row][col];
-            if (col < 2) cout << " |";
+            if (col < 2)
+                cout << " |";
         }
-    cout << "\t\t " << (row * 3) + 1 << " | " << (row * 3) + 2 << " | " << (row * 3) + 3;
-    if (row < 2) cout << endl << "-----------\t\t-----------";
-    cout << endl;
+        cout << "\t\t " << (row * 3) + 1 << " | " << (row * 3) + 2 << " | " << (row * 3) + 3;
+        if (row < 2)
+            cout << endl
+                 << "-----------\t\t-----------";
+        cout << endl;
     }
     cout << endl;
 }
 
-void TicTacToe::playGame(){
+// Function to get user move and place it on the board
+void TicTacToe::getUserMove(char player)
+{
+    string input;
+    char char_entered;
+    int num_entered, row, col, index;
+    int player_turn = (player == 'X') ? 1 : 2;
+
+    while (true)
+    {
+        cout << "Player " << player_turn << " Where do you want to play? Select a number from 1-9: " << endl;
+        getline(cin, input);
+
+        if (input != "")
+        {
+            char_entered = input.c_str()[0];
+            if (char_entered >= '1' && char_entered <= '9')
+            {
+                num_entered = char_entered - '0';
+                index = num_entered - 1;
+                row = index / 3;
+                col = index % 3;
+
+                char b_pos = board[row][col];
+                if (b_pos != 'X' && b_pos != 'O')
+                {
+                    board[row][col] = player;
+                    totalMoves++;
+                    break;
+                }
+                else
+                {
+                    cout << "Wrong move. Position is already taken. Try again" << endl;
+                }
+            }
+            else
+            {
+                cout << "You must enter a number between 1-9 to make your move. Try again.\n";
+            }
+        }
+        else
+        {
+            cout << "You must enter something!!" << endl;
+        }
+    }
+    cout << "Total moves: " << totalMoves << endl;
+}
+
+// Function to check if a player has won
+bool TicTacToe::checkForWins(char player) const
+{
+    if (totalMoves >= minMovesToWin)
+    {
+        for (int i = 0; i < BSIZE; ++i)
+        {
+            if ((board[i][0] == player && board[i][1] == player && board[i][2] == player) || // Rows
+                (board[0][i] == player && board[1][i] == player && board[2][i] == player))
+            { // Columns
+                return true;
+            }
+        }
+        if ((board[0][0] == player && board[1][1] == player && board[2][2] == player) || // Diagonal
+            (board[0][2] == player && board[1][1] == player && board[2][0] == player))
+        { // Anti-diagonal
+            return true;
+        }
+    }
+    return false;
+}
+
+// Function to check if the game is a draw
+bool TicTacToe::checkForDraw() const
+{
+    return totalMoves == maxMoves;
+}
+
+// Function to play the game
+void TicTacToe::playGame()
+{
+    char player = 'X';
+    bool gameOver = false;
+    do
+    {
+        displayBoard();
+        getUserMove(player);
+        if (checkForWins(player))
+        {
+            cout << "\n *********** WE HAVE A WINNER!! ***********\n"
+                 << player << " WINS!!\n";
+            gameOver = true;
+        }
+        else if (checkForDraw())
+        {
+            cout << "IT'S A DRAW! Play again!\n";
+            gameOver = true;
+        }
+        player = togglePlayer(player);
+    } while (!gameOver);
     displayBoard();
 }
+
+// Derived class for TicTacToe game with AI
 class TicTacToeVsAI : public TicTacToe
 {
+public:
+    using TicTacToe::TicTacToe;                                  // Inherit constructors
+    void compMove(char player);                                  // Function for AI move
+    void playVsAI() override;                                    // Override function to play against AI
+    friend void displayWinner(TicTacToeVsAI &game, char player); // Friend function declaration
 };
 
+// Friend function definition
+void displayWinner(TicTacToeVsAI &game, char player)
+{
+    if (game.checkForWins(player))
+    {
+        cout << "\n *********** WE HAVE A WINNER!! ***********\n"
+             << player << " WINS!!\n";
+    }
+}
+
+// Function for AI move
+void TicTacToeVsAI::compMove(char player)
+{
+    srand(time(NULL));
+    while (true)
+    {
+        int computer_choice = (rand() % 9) + 1;
+        int row = (computer_choice - 1) / 3;
+        int col = (computer_choice - 1) % 3;
+        char bpos = board[row][col];
+        if (bpos == 'X' || bpos == 'O')
+        {
+            continue;
+        }
+        else
+        {
+            cout << "Computer will play at: " << computer_choice << endl;
+            board[row][col] = player;
+            totalMoves++;
+            break;
+        }
+    }
+    cout << "Total moves: " << totalMoves << endl;
+}
+
+// Function to play against AI
+void TicTacToeVsAI::playVsAI()
+{
+    char player = 'X';
+    bool gameOver = false;
+    do
+    {
+        displayBoard();
+        getUserMove(player);
+        if (checkForWins(player))
+        {
+            displayWinner(*this, player); // Using the friend function
+            gameOver = true;
+        }
+        else if (checkForDraw())
+        {
+            cout << "IT'S A DRAW! Play again!\n";
+            gameOver = true;
+        }
+        player = togglePlayer(player);
+        compMove(player);
+        if (checkForWins(player))
+        {
+            displayWinner(*this, player); // Using the friend function
+            gameOver = true;
+        }
+        else if (checkForDraw())
+        {
+            cout << "IT'S A DRAW! Play again!\n";
+            gameOver = true;
+        }
+        player = togglePlayer(player);
+    } while (!gameOver);
+    displayBoard();
+}
+
+std::map<string, string> users = {
+    {"Wasee", "wasee"},
+    {"Rafay", "rafay"},
+    {"Younus", "younus"}};
+// Function to display the menu and get user choice
 char menu()
 {
     char choice;
@@ -134,25 +346,57 @@ char menu()
     cin >> choice;
     return choice;
 }
-
+bool Password()
+{
+    string username, password;
+    textcolor(3);
+    cout << "Enter username: ";
+    textcolor(4);
+    cin >> username;
+    textcolor(3);
+    cout << "Enter password: ";
+    textcolor(4);
+    cin >> password;
+    textcolor(7);
+    if (users.find(username) != users.end() && users[username] == password)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+// Function to execute commands based on user choice
 void command()
 {
-    // shows menu
     char command;
     Game *game = nullptr;
+
+    if (!Password())
+    {
+        textcolor(4);
+        cout << "Invalid username or password. Exiting program." << endl;
+        textcolor(7);
+        exit(0);
+    }
+
     do
     {
         command = menu();
         switch (command)
         {
         case '1':
-            // player vs player
+            cin.ignore();
             game = new TicTacToe();
             game->playGame();
-
+            delete game;
             break;
         case '2':
-            // player vs AI
+            cin.ignore();
+            game = new TicTacToeVsAI();
+            game->playVsAI();
+            delete game;
             break;
         }
         system("pause");
@@ -160,20 +404,10 @@ void command()
     exit(0);
 }
 
+// Main function to start the game
 int main()
 {
-    command(); // shows intro informations
-    // char board[3][3]{
-    //     {'-', '-', '-'},
-    //     {'-', '-', '-'},
-    //     {'-', '-', '-'}};
-
-    // string Plyr1;
-    // string Plyr2;
-    // cout << "Enter player 1 name : ";
-    // getline(cin, Plyr1);
-    // cout << "Enter player 2 name : ";
-    // getline(cin, Plyr2);
-
+    command();
+    cin.get();
     return 0;
 }
