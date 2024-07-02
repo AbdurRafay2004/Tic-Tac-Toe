@@ -375,10 +375,10 @@ void TicTacToeVsAI::playVsAI()
 
 // Map to store users and passwords
 std::map<string, string> users = {
-    {"Wasee", "wasee"},
-    {"Rafay", "rafay"},
-    {"Younus", "younus"},
-    {"gg", "gg"}};
+    {"wasee", "wasee"},
+    {"wafay", "rafay"},
+    {"younus", "younus"},
+    {"p", "p"}};
 
 // Function to display the menu and get user choice
 char menu()
