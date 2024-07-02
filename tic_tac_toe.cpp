@@ -24,29 +24,29 @@ public:
     Game() : TotalMoves(0) { fill_board(); } // Constructor to initialize the board
     int totalMoves = TotalMoves;
     // Pure virtual functions for game operations
-    virtual void displayBoard() const = 0;            
-    virtual void getUserMove(char players_O_X) = 0;       
-    virtual bool checkForWins(char players_O_X) const = 0; 
-    virtual bool checkForDraw() const = 0;         
-    
+    virtual void displayBoard() const = 0;
+    virtual void getUserMove(char players_O_X) = 0;
+    virtual bool checkForWins(char players_O_X) const = 0;
+    virtual bool checkForDraw() const = 0;
+
     // Functions to play the game
-    virtual void playGame();    
-    virtual void playVsAI(); 
+    virtual void playGame();
+    virtual void playVsAI();
 
     // Function to switch players
     char togglePlayer(char players_O_X);
 
     // Function to initialize the board
-    void fill_board();  
+    void fill_board();
 
 protected:
     static const int BSIZE = 3;         // Board size
     static const int maxMoves = 9;      // Maximum number of moves
     static const int minMovesToWin = 5; // Minimum number of moves to win
 
-    char board[BSIZE][BSIZE];           // Game board
+    char board[BSIZE][BSIZE]; // Game board
 private:
-    int TotalMoves;                     // Counter for total moves
+    int TotalMoves; // Counter for total moves
 };
 
 // Function to switch players
@@ -67,13 +67,13 @@ void Game::fill_board()
     }
 }
 
-//# Function to play the game (to be overridden in derived class)
+// # Function to play the game (to be overridden in derived class)
 void Game::playGame()
 {
     // This method will be overridden in the derived class.
 }
 
-//# Function to play against AI (to be overridden in derived class)
+// # Function to play against AI (to be overridden in derived class)
 void Game::playVsAI()
 {
     // This method will be overridden in the derived class.
@@ -88,12 +88,12 @@ public:
     {
         totalMoves = 0;
         fill_board();
-    } 
+    }
 
     // Override functions for game operations
-    void displayBoard() const override;            
-    void getUserMove(char players_O_X) override;      
-    bool checkForWins(char players_O_X) const override; 
+    void displayBoard() const override;
+    void getUserMove(char players_O_X) override;
+    bool checkForWins(char players_O_X) const override;
     bool checkForDraw() const override;
 
     // Override function to play the game
@@ -102,7 +102,7 @@ public:
     string playerName_X;
     string playerName_O;
 
-    string getUserName(string name, char mark); 
+    string getUserName(string name, char mark);
 };
 
 // Function to display the game board
@@ -111,7 +111,7 @@ void TicTacToe::displayBoard() const
     // Loop through the board and display its contents
     char x = 'X';
     char o = 'O';
-    
+
     for (int row = 0; row < 3; row++)
     {
         cout << "\t\t"; // Adds tab spacing for each row
@@ -130,13 +130,14 @@ void TicTacToe::displayBoard() const
             cout << board[row][col];
 
             textcolor(15);
-            if (col < 2) cout << " |";
+            if (col < 2)
+                cout << " |";
         }
-    
-        //guide board (will iterate 3 times)
+
+        // guide board (will iterate 3 times)
         cout << "\t\t " << (row * 3) + 1 << " | " << (row * 3) + 2 << " | " << (row * 3) + 3;
 
-        //guide board lines
+        // guide board lines
         if (row < 2)
             cout << endl
                  << "\t\t-----------\t\t-----------";
@@ -145,10 +146,11 @@ void TicTacToe::displayBoard() const
     cout << endl;
 }
 
-//Function to get names of the players
-string TicTacToe::getUserName(string name, char mark){
-    
-    cout << "Who will play "<<mark<<"(Enter name): ";
+// Function to get names of the players
+string TicTacToe::getUserName(string name, char mark)
+{
+
+    cout << "Who will play " << mark << "(Enter name): ";
     getline(cin, name);
 
     return name;
@@ -159,21 +161,28 @@ void TicTacToe::getUserMove(char players_O_X)
     string input;
     char char_entered;
     int num_entered, row, col, index;
-    
-    //switch player
+
+    // switch player
     string player_turn = (players_O_X == 'X') ? playerName_X : playerName_O;
 
     while (true)
     {
-        textcolor(4);//red
-        cout << player_turn;
+        if (players_O_X == 'X')
+            {
+                textcolor(4);
+                cout << playerName_X;
+            }
+            else
+            {
+                textcolor(6);
+                cout << playerName_O;
+            }
         textcolor(15);//white
-
         cout << " Where do you want to play? Select a number from 1-9: ";
-        textcolor(4);//red
+        textcolor(4); // red
 
         getline(cin, input);
-        textcolor(15);//white
+        textcolor(15); // white
 
         if (/*input != ""*/ !input.empty())
         {
@@ -194,23 +203,23 @@ void TicTacToe::getUserMove(char players_O_X)
                 }
                 else
                 {
-                    textcolor(4);//red
+                    textcolor(4); // red
                     cout << "Wrong move. Position is already taken. Try again" << endl;
-                    textcolor(15);//white
+                    textcolor(15); // white
                 }
             }
             else
             {
-                textcolor(4);//red
+                textcolor(4); // red
                 cout << "You must enter a number between 1-9 to make your move. Try again.\n";
-                textcolor(15);//white
+                textcolor(15); // white
             }
         }
         else
         {
-            textcolor(4);//red
+            textcolor(4); // red
             cout << "You must enter something!!" << endl;
-            textcolor(15);//white
+            textcolor(15); // white
         }
     }
     cout << "Total moves: " << totalMoves << endl;
@@ -260,18 +269,31 @@ void TicTacToe::playGame()
         getUserMove(players_O_X);
         if (checkForWins(players_O_X))
         {
+            textcolor(2); // green
+            cout << "\n *********** WE HAVE A WINNER!! ***********\n";
+            // cout << ((players_O_X == 'X') ? playerName_X : playerName_O);
+
+            if (players_O_X == 'X')
+            {
+                textcolor(4);
+                cout << playerName_X;
+            }
+            else
+            {
+                textcolor(6);
+                cout << playerName_O;
+            }
             textcolor(2);//green
-            cout << "\n *********** WE HAVE A WINNER!! ***********\n"
-                 << ((players_O_X == 'X') ? playerName_X : playerName_O) << " WINS!!\n";
-            textcolor(15);//white
+            cout << " WINS!!\n";
+            textcolor(15); // white
             gameOver = true;
             break;
         }
         else if (checkForDraw())
         {
-            textcolor(2);//green
+            textcolor(2); // green
             cout << "IT'S A DRAW! Play again!\n";
-            textcolor(15);//white
+            textcolor(15); // white
             gameOver = true;
             break;
         }
@@ -284,10 +306,10 @@ void TicTacToe::playGame()
 class TicTacToeVsAI : public TicTacToe
 {
 public:
-    using TicTacToe::TicTacToe;   // Inherit constructors
-    void compMove(char players_O_X);   // Function for AI move
-    void playVsAI() override;     // Override function to play against AI
-    
+    using TicTacToe::TicTacToe;      // Inherit constructors
+    void compMove(char players_O_X); // Function for AI move
+    void playVsAI() override;        // Override function to play against AI
+
     friend void displayWinner(TicTacToeVsAI &game, char players_O_X, string playerName_X); // Friend function declaration
 };
 
@@ -296,10 +318,27 @@ void displayWinner(TicTacToeVsAI &game, char players_O_X, string playerName_X)
 {
     if (game.checkForWins(players_O_X))
     {
-        textcolor(2);//green
-        cout << "\n *********** WE HAVE A WINNER!! ***********\n"
-             << ((players_O_X == 'X') ? playerName_X : "Computer") << " WINS!!\n";
-        textcolor(15);//white
+        // textcolor(2);//green
+        // cout << "\n *********** WE HAVE A WINNER!! ***********\n"
+        //      << ((players_O_X == 'X') ? playerName_X : "Computer") << " WINS!!\n";
+        // textcolor(15);//white
+
+        textcolor(2); // green
+        cout << "\n *********** WE HAVE A WINNER!! ***********\n";
+
+        if (players_O_X == 'X')
+        {
+            textcolor(4);
+            cout << playerName_X;
+        }
+        else
+        {
+            textcolor(2);
+            cout << "Computer";
+        }
+        textcolor(2);
+        cout << " WINS!!\n";
+        textcolor(15); // white
     }
 }
 
@@ -320,7 +359,7 @@ void TicTacToeVsAI::compMove(char players_O_X)
         }
         else
         {
-            textcolor(2);//green
+            textcolor(2); // green
             cout << "Computer";
             textcolor(15); // White
             cout << " will play at: " << computer_choice << endl;
@@ -411,9 +450,9 @@ char menu()
     cout << "\t\t\t[0] ";
     textcolor(6);
     cout << "Quit Game" << endl;
-    textcolor(1);//blue
+    textcolor(1); // blue
     cin >> choice;
-    textcolor(15);//white
+    textcolor(15); // white
     return choice;
 }
 
