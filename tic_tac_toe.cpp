@@ -21,8 +21,8 @@ void textcolor(int color)
 class Game
 {
 public:
-    Game() : totalMoves(0) { fill_board(); } // Constructor to initialize the board
-
+    Game() : TotalMoves(0) { fill_board(); } // Constructor to initialize the board
+    int totalMoves = TotalMoves;
     // Pure virtual functions for game operations
     virtual void displayBoard() const = 0;            
     virtual void getUserMove(char players_O_X) = 0;       
@@ -45,7 +45,8 @@ protected:
     static const int minMovesToWin = 5; // Minimum number of moves to win
 
     char board[BSIZE][BSIZE];           // Game board
-    int totalMoves;                     // Counter for total moves
+private:
+    int TotalMoves;                     // Counter for total moves
 };
 
 // Function to switch players
@@ -66,13 +67,13 @@ void Game::fill_board()
     }
 }
 
-// Function to play the game (to be overridden in derived class)
+//# Function to play the game (to be overridden in derived class)
 void Game::playGame()
 {
     // This method will be overridden in the derived class.
 }
 
-// Function to play against AI (to be overridden in derived class)
+//# Function to play against AI (to be overridden in derived class)
 void Game::playVsAI()
 {
     // This method will be overridden in the derived class.
