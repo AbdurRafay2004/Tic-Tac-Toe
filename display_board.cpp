@@ -18,17 +18,19 @@ void textcolor(int color)
 int main()
 {
     static const int BSIZE = 3; // Board size
-    // char board[BSIZE][BSIZE];
+    char board[BSIZE][BSIZE];
     char x = 'X';
     char o = 'O';
+    //char board[BSIZE][BSIZE] = {{'X', 'O', 'X'}, {' ', 'O', 'X'}, {'O', ' ', ' '}};
+
     // fill board
-    /*for (int row = 0; row < BSIZE; row++)
+    for (int row = 0; row < BSIZE; row++)
     {
         for (int col = 0; col < BSIZE; col++)
         {
             board[row][col] = '-';
         }
-    }*/
+    }
 
     /*
     cout << " --------------\n";
@@ -52,7 +54,6 @@ int main()
         cout << "\t\t 7 | 8 | 9 " << endl
              << endl;
     */
-    char board[BSIZE][BSIZE] = {{'X', 'O', 'X'}, {' ', 'O', 'X'}, {'O', ' ', ' '}};
 
     for (int row = 0; row < 3; row++)
     {

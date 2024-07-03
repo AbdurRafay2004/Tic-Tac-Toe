@@ -121,11 +121,11 @@ void TicTacToe::displayBoard() const
             // << board[row][col];
             if (board[row][col] == x)
             {
-                textcolor(4);
+                textcolor(4);//red
             }
             else if (board[row][col] == o)
             {
-                textcolor(2);
+                textcolor(2);//green
             }
             cout << board[row][col];
 
@@ -151,17 +151,21 @@ string TicTacToe::getUserName(string name, char mark)
 {
 
     cout << "Who will play ";
+
+    //to colorise X or O
     if (mark == 'X')
     {
-        textcolor(4);
+        textcolor(4);//red
     }
     else
     {
-        textcolor(2);
+        textcolor(2);//green
     }
     cout << mark;
     textcolor(15); // white
     cout << " (Enter name): ";
+
+    //to colorise username
     if (mark == 'X')
     {
         textcolor(4);
@@ -293,6 +297,7 @@ void TicTacToe::playGame()
             cout << "\n *********** WE HAVE A WINNER!! ***********\n";
             // cout << ((players_O_X == 'X') ? playerName_X : playerName_O);
 
+            //condition to colorise winners name
             if (players_O_X == 'X')
             {
                 textcolor(4);
@@ -303,6 +308,7 @@ void TicTacToe::playGame()
                 textcolor(2);
                 cout << playerName_O;
             }
+
             textcolor(2); // green
             cout << " WINS!!\n";
             textcolor(15); // white
@@ -397,6 +403,7 @@ void TicTacToeVsAI::playVsAI()
     playerName_X = getUserName(playerName_X, 'X');
     char players_O_X = 'X';
     bool gameOver = false;
+
     do
     {
         displayBoard();
