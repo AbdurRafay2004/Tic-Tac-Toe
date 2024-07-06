@@ -10,3 +10,15 @@
     <li>Colored Texts(System: windows)</li>
     <li>Overal Nice design (Except the code 🤧)</li>
 </ul>
+OOP Implementations:
+   <ul>
+    <li>Class</li>
+    <li>Object</li>
+    <li>Encapsulation</li>
+    <li>Polymorphism</li>
+    <li>Inheritance</li>
+    <li>Abstraction</li>
+    <li>Virtual function</li>
+    <li>Friend function</li>
+    <li>Loop, array, pointer</li>
+</ul>
