@@ -332,11 +332,106 @@ void TicTacToe::playGame()
 class TicTacToeVsAI : public TicTacToe
 {
 public:
-    using TicTacToe::TicTacToe;      // Inherit constructors
-    void compMove(char players_O_X); // Function for AI move
-    void playVsAI() override;        // Override function to play against AI
+    using TicTacToe::TicTacToe;                       // Inherit constructors
+    void compMove(char players_O_X, bool isHardMode); // Function for AI move
+    void playVsAI() override;                         // Override function to play against AI
 
     friend void displayWinner(TicTacToeVsAI &game, char players_O_X, string playerName_X); // Friend function declaration
+
+private:
+    int minimax(char board[3][3], int depth, bool isMaximizing, char aiPlayer, char humanPlayer)
+    {
+        char result = checkWinner(board);
+        if (result == aiPlayer)
+            return 10 - depth;
+        if (result == humanPlayer)
+            return depth - 10;
+        if (result == 'T')
+            return 0;
+
+        if (isMaximizing)
+        {
+            int bestScore = -1000;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (board[i][j] == '-')
+                    {
+                        board[i][j] = aiPlayer;
+                        int score = minimax(board, depth + 1, false, aiPlayer, humanPlayer);
+                        board[i][j] = '-';
+                        bestScore = std::max(score, bestScore);
+                    }
+                }
+            }
+            return bestScore;
+        }
+        else
+        {
+            int bestScore = 1000;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (board[i][j] == '-')
+                    {
+                        board[i][j] = humanPlayer;
+                        int score = minimax(board, depth + 1, true, aiPlayer, humanPlayer);
+                        board[i][j] = '-';
+                        bestScore = std::min(score, bestScore);
+                    }
+                }
+            }
+            return bestScore;
+        }
+    }
+
+    void findBestMove(char board[3][3], int &row, int &col, char aiPlayer, char humanPlayer)
+    {
+        int bestScore = -1000;
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (board[i][j] == '-')
+                {
+                    board[i][j] = aiPlayer;
+                    int score = minimax(board, 0, false, aiPlayer, humanPlayer);
+                    board[i][j] = '-';
+                    if (score > bestScore)
+                    {
+                        bestScore = score;
+                        row = i;
+                        col = j;
+                    }
+                }
+            }
+        }
+    }
+
+    char checkWinner(char board[3][3])
+    {
+        // Check rows, columns and diagonals
+        for (int i = 0; i < 3; i++)
+        {
+            if (board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] != '-')
+                return board[i][0];
+            if (board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] != '-')
+                return board[0][i];
+        }
+        if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] != '-')
+            return board[0][0];
+        if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] != '-')
+            return board[0][2];
+
+        // Check for tie
+        for (int i = 0; i < 3; i++)
+            for (int j = 0; j < 3; j++)
+                if (board[i][j] == '-')
+                    return 'N'; // Game is not over
+        return 'T';             // It's a tie
+    }
 };
 
 // Friend function definition(used this to showcase the implementation of friend functions)
@@ -369,29 +464,45 @@ void displayWinner(TicTacToeVsAI &game, char players_O_X, string playerName_X)
 }
 
 // Function for AI move
-void TicTacToeVsAI::compMove(char players_O_X)
+void TicTacToeVsAI::compMove(char players_O_X, bool isHardMode)
 {
-    // AI makes a random move within the available board spaces
-    srand(time(NULL));
-    while (true)
+    if (isHardMode)
     {
-        int computer_choice = (rand() % 9) + 1;
-        int row = (computer_choice - 1) / 3;
-        int col = (computer_choice - 1) % 3;
-        char bpos = board[row][col];
-        if (bpos == 'X' || bpos == 'O')
+        int row, col;
+        findBestMove(board, row, col, players_O_X, (players_O_X == 'X') ? 'O' : 'X');
+
+        textcolor(2); // green
+        cout << "Computer";
+        textcolor(15); // White
+        cout << " will play at: " << (row * 3 + col + 1) << endl;
+
+        board[row][col] = players_O_X;
+        totalMoves++;
+    }
+    else
+    {
+        // Existing easy mode logic
+        srand(time(NULL));
+        while (true)
         {
-            continue;
-        }
-        else
-        {
-            textcolor(2); // green
-            cout << "Computer";
-            textcolor(15); // White
-            cout << " will play at: " << computer_choice << endl;
-            board[row][col] = players_O_X;
-            totalMoves++;
-            break;
+            int computer_choice = (rand() % 9) + 1;
+            int row = (computer_choice - 1) / 3;
+            int col = (computer_choice - 1) % 3;
+            char bpos = board[row][col];
+            if (bpos == 'X' || bpos == 'O')
+            {
+                continue;
+            }
+            else
+            {
+                textcolor(2); // green
+                cout << "Computer";
+                textcolor(15); // White
+                cout << " will play at: " << computer_choice << endl;
+                board[row][col] = players_O_X;
+                totalMoves++;
+                break;
+            }
         }
     }
     cout << "Total moves: " << totalMoves << endl;
@@ -403,6 +514,18 @@ void TicTacToeVsAI::playVsAI()
     playerName_X = getUserName(playerName_X, 'X');
     char players_O_X = 'X';
     bool gameOver = false;
+    bool isHardMode = false;
+
+    char mode_switch;
+    cout << "\t\t\t[1] Easy mode" << endl;
+    cout << "\t\t\t[2] Hard mode" << endl;
+    cin >> mode_switch;
+    cin.ignore();
+
+    if (mode_switch == '2')
+    {
+        isHardMode = true;
+    }
 
     do
     {
@@ -410,7 +533,7 @@ void TicTacToeVsAI::playVsAI()
         getUserMove(players_O_X);
         if (checkForWins(players_O_X))
         {
-            displayWinner(*this, players_O_X, playerName_X); // Using the friend function
+            displayWinner(*this, players_O_X, playerName_X);
             gameOver = true;
             break;
         }
@@ -423,10 +546,10 @@ void TicTacToeVsAI::playVsAI()
 
         players_O_X = togglePlayer(players_O_X);
 
-        compMove(players_O_X);
+        compMove(players_O_X, isHardMode);
         if (checkForWins(players_O_X))
         {
-            displayWinner(*this, players_O_X, playerName_X); // Using the friend function
+            displayWinner(*this, players_O_X, playerName_X);
             gameOver = true;
             break;
         }
@@ -541,24 +664,8 @@ void command()
         case '2':
             cin.ignore();
             game = new TicTacToeVsAI();
-            char mode_switch;
-            cout << "\t\t\t[1] Easy mode" << endl;
-            cout << "\t\t\t[2] Hard mode" << endl;
-            cin >> mode_switch;
-            switch (mode_switch)
-            {
-            case '1':
-                cin.ignore();
-                game->playVsAI();
-                delete game;
-                break;
-
-            case '2':
-                cin.ignore();
-                cout << endl
-                     << "Coming Soon..." << endl;
-                break;
-            }
+            game->playVsAI();
+            delete game;
             break;
         }
         system("pause");
