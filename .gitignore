@@ -7,4 +7,5 @@ useless/**
 *.zip
 *.rar
 *.vscode
+*.txt
 # *.gitignore
