@@ -595,7 +595,8 @@ string contributions()
 
 // Function to check user password
 // Function to register a new user
-bool registerUser() {
+bool registerUser()
+{
     string username, password;
     std::ofstream file("users.txt", std::ios::app);
 
@@ -617,7 +618,8 @@ bool registerUser() {
     return true;
 }
 // Function to check user password
-bool loginUser() {
+bool loginUser()
+{
     string username, password;
     textcolor(3);
     cout << "\t\t\tEnter username: ";
@@ -632,11 +634,14 @@ bool loginUser() {
 
     std::ifstream file("users.txt");
     string line;
-    while (std::getline(file, line)) {
+    while (std::getline(file, line))
+    {
         std::istringstream iss(line);
         string storedUsername, storedPassword;
-        if (iss >> storedUsername >> storedPassword) {
-            if (username == storedUsername && password == storedPassword) {
+        if (iss >> storedUsername >> storedPassword)
+        {
+            if (username == storedUsername && password == storedPassword)
+            {
                 file.close();
                 return true;
             }
@@ -649,7 +654,8 @@ bool loginUser() {
     return false;
 }
 // Function to display the initial menu and get user choice
-char initialMenu() {
+char initialMenu()
+{
     char choice;
 
     textcolor(1);
@@ -665,7 +671,8 @@ char initialMenu() {
 }
 
 // Function to display the game menu and get user choice
-char gameMenu() {
+char gameMenu()
+{
     char choice;
 
     textcolor(1);
@@ -681,57 +688,66 @@ char gameMenu() {
 }
 
 // Function to execute commands based on user choice
-void command() {
+void command()
+{
     char command;
     Game *game = nullptr;
     bool loggedIn = false;
 
-    do {
-        if (!loggedIn) {
+    do
+    {
+        if (!loggedIn)
+        {
             command = initialMenu();
-            switch (command) {
-                case '1':
-                    loggedIn = loginUser();
-                    break;
-                case '2':
-                    registerUser();
-                    break;
-                case '0':
-                    exit(0);
-                default:
-                    cout << "Invalid choice. Please try again." << endl;
-            }
-        } else {
-            command = gameMenu();
-            switch (command) {
-                case '1':
-                    cin.ignore();
-                    game = new TicTacToe();
-                    game->playGame();
-                    delete game;
-                    break;
-                case '2':
-                    cin.ignore();
-                    game = new TicTacToeVsAI();
-                    game->playVsAI();
-                    delete game;
-                    break;
-                case '0':
-                    loggedIn = false;
-                    cout << "Logged out successfully." << endl;
-                    break;
-                default:
-                    cout << "Invalid choice. Please try again." << endl;
+            switch (command)
+            {
+            case '1':
+                loggedIn = loginUser();
+                break;
+            case '2':
+                registerUser();
+                break;
+            case '0':
+                exit(0);
+            default:
+                cout << "Invalid choice. Please try again." << endl;
             }
         }
-        if (command != '0') {
+        else
+        {
+            command = gameMenu();
+            switch (command)
+            {
+            case '1':
+                cin.ignore();
+                game = new TicTacToe();
+                game->playGame();
+                delete game;
+                break;
+            case '2':
+                cin.ignore();
+                game = new TicTacToeVsAI();
+                game->playVsAI();
+                delete game;
+                break;
+            case '0':
+                loggedIn = false;
+                cout << "Logged out successfully." << endl;
+                break;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+            }
+        }
+        if (command != '0')
+        {
             system("pause");
         }
     } while (true);
 }
 
 // Main function to start the game
-int main() {
+int main()
+{
     contributions();
     command();
     return 0;
