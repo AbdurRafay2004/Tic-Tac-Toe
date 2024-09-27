@@ -163,7 +163,9 @@ string TicTacToe::getUserName(string name, char mark)
     {
         textcolor(2); // green
     }
+
     cout << mark;
+
     textcolor(15); // white
     cout << " (Enter name): ";
 
@@ -510,7 +512,7 @@ void TicTacToeVsAI::compMove(char players_O_X, bool isHardMode)
     cout << "Total moves: " << totalMoves << endl;
 }
 
-// Function to play against AI
+// Function menu to play against AI
 void TicTacToeVsAI::playVsAI()
 {
     playerName_X = getUserName(playerName_X, 'X');
