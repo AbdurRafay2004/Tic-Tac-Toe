@@ -13,6 +13,7 @@ using std::string;
 
 // Function to change text color
 void textcolor(int color)
+
 {
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(h, color);
